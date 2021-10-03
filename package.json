@@ -1,0 +1,28 @@
+{
+  "name": "rc-manager",
+  "version": "0.0.1",
+  "description": "NPM and Yarn config Manager",
+  "bin": {
+    "rcmanager": "./index.js"
+  },
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Calvin Schröder <calvin-schroeder@hotmail.com>",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/Lalaluka/rc-manager.git"
+  },
+  "keywords": [
+    "node",
+    "config",
+    "npmrc",
+    "utility",
+    "shell",
+    "npm",
+    "yarn",
+    "yarnrc"
+  ]
+}
