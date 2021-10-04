@@ -1,9 +1,9 @@
 {
   "name": "rc-manager",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "NPM and Yarn config Manager",
   "bin": {
-    "rcmanager": "./index.js"
+    "rc-manager": "./index.js"
   },
   "main": "index.js",
   "scripts": {

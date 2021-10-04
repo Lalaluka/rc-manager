@@ -107,6 +107,12 @@ function deleteProfileByName(profileName){
   }
 }
 
+//List Profiles in Store
+function listProfiles(){
+  console.log("Available Profiles:")
+  JSON.parse(fs.readFileSync(profile_store).toString()).profiles.map(function(profile) {console.log("  " + profile.name)});
+}
+
 const processArgs = process.argv.slice(2)
 
 switch(processArgs[0]) {
@@ -117,7 +123,7 @@ switch(processArgs[0]) {
       process.stdout.write(
         'No Profilename provided.\n'
         + '  save command follows:\n'
-        + '  rcmanager save <Profilename>'
+        + '  rc-manager save <Profilename>'
       )
       process.exit(1)
     }
@@ -129,7 +135,7 @@ switch(processArgs[0]) {
       process.stdout.write(
         'No Profilename provided.\n'
         + '  save command follows:\n'
-        + '  rcmanager load <Profilename>'
+        + '  rc-manager load <Profilename>'
       )
       process.exit(1)
     }
@@ -141,18 +147,22 @@ switch(processArgs[0]) {
       process.stdout.write(
         'No Profilename provided.\n'
         + '  save command follows:\n'
-        + '  rcmanager delete <Profilename>'
+        + '  rc-manager delete <Profilename>'
       )
       process.exit(1)
     }
     break;
+  case "list":
+    listProfiles()
+    break;
   case "--help":
     process.stdout.write(
-      'rcmanager switch between npm and yarn configs\n'
-      + '  rcmanager --help                for help.\n'
-      + '  rcmanager save <Profilename>    to save the current Configs to a new Profile\n'
-      + '  rcmanager load <Profilename>    to load a Profile to active Configs\n'
-      + '  rcmanager delete <Profilename>  to delete a Profile'
+      'rc-manager switch between npm and yarn configs\n'
+      + '  rc-manager --help                for help.\n'
+      + '  rc-manager save <Profilename>    to save the current Configs to a new Profile\n'
+      + '  rc-manager load <Profilename>    to load a Profile to active Configs\n'
+      + '  rc-manager delete <Profilename>  to delete a Profile\n'
+      + '  rc-manager list                  to list available Profiles'
     )
     break;
   default:

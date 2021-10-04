@@ -6,13 +6,20 @@ I find my self often switching between multiple private npmrc configs and Packag
 
 The tool automatically detects if yarn is installed and if its not the case it's opts to an npm only mode.
 
-## Usage
+## Usage and Installation
+Install the package globally with either npm or yarn
+```
+npm install -g rc-manager
+yarn global add rc-manager
+```
+
 After installation these possibilities 
 ````
-  rcmanager --help                for help.
-  rcmanager save <Profilename>    to save the current Configs to a new Profile
-  rcmanager load <Profilename>    to load a Profile to active Configs
-  rcmanager delete <Profilename>  to delete a Profile
+  rc-manager --help                for help.
+  rc-manager save <Profilename>    to save the current Configs to a new Profile
+  rc-manager load <Profilename>    to load a Profile to active Configs
+  rc-manager delete <Profilename>  to delete a Profile
+  rc-manager list                  to list available Profiles
 ````
 
 ## Manual Changes
@@ -24,7 +31,7 @@ The cli tool will create a new file in your Home directory called `rc_switcher_s
     {
       "name": "Profile Name",
       "npmrc": "npmrc File",
-      "yarnrc": "yarnrc FIle"
+      "yarnrc": "yarnrc File"
     }
     ...
   ]
