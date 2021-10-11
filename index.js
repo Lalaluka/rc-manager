@@ -75,7 +75,7 @@ function saveCurrentConfig(profileName){
     })
     fs.writeFileSync(profile_store, JSON.stringify(store, null, 2), fserror)
   } else {
-    console.error("Profile Key allready exists!");
+    console.error("Profile Key already exists!");
     process.exit(1)
   }
 }
@@ -111,6 +111,11 @@ function deleteProfileByName(profileName){
 function listProfiles(){
   console.log("Available Profiles:")
   JSON.parse(fs.readFileSync(profile_store).toString()).profiles.map(function(profile) {console.log("  " + profile.name)});
+}
+
+//Show current active Profile
+function showActive(){
+  console.log("TODO Implement")
 }
 
 const processArgs = process.argv.slice(2)
@@ -155,6 +160,9 @@ switch(processArgs[0]) {
   case "list":
     listProfiles()
     break;
+  case "current":
+    showAction()
+    break;
   case "--help":
     process.stdout.write(
       'rc-manager switch between npm and yarn configs\n'
@@ -162,7 +170,8 @@ switch(processArgs[0]) {
       + '  rc-manager save <Profilename>    to save the current Configs to a new Profile\n'
       + '  rc-manager load <Profilename>    to load a Profile to active Configs\n'
       + '  rc-manager delete <Profilename>  to delete a Profile\n'
-      + '  rc-manager list                  to list available Profiles'
+      + '  rc-manager list                  to list available Profiles\n'
+      + '  rc-manager current               show current active Profile'
     )
     break;
   default:

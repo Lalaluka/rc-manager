@@ -20,6 +20,7 @@ After installation these possibilities
   rc-manager load <Profilename>    to load a Profile to active Configs
   rc-manager delete <Profilename>  to delete a Profile
   rc-manager list                  to list available Profiles
+  rc-manager current               show current active Profile
 ````
 
 ## Manual Changes
