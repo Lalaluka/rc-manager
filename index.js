@@ -15,13 +15,13 @@ const fserror = (err) => {
 }
 
 //check if npmrc exists
-if(!fs.existsSync(npmrc)){
+if (!fs.existsSync(npmrc)) {
   console.error("No npmrc found!")
   process.exit(1)
 };
 //Check if yarnrc exists
 const yarnmode = (() => {
-  if(!fs.existsSync(yarnrc)){
+  if (!fs.existsSync(yarnrc)) {
     console.info("No yarnrc found. Using npm only mode.")
     return false
   } else {
@@ -30,12 +30,11 @@ const yarnmode = (() => {
 })();
 
 //If Store does not exist create one with a default Profile storing current config
-(function checkStoreExitence(){
-  if(!fs.existsSync(profile_store)){
-    //read current npmrc
+(function checkStoreExitence() {
+  if (!fs.existsSync(profile_store)) {
     const npmrcFile = fs.readFileSync(npmrc).toString();
-    const yarnrcFile = (()=> {
-      if(yarnmode){
+    const yarnrcFile = (() => {
+      if (yarnmode) {
         return fs.readFileSync(yarnrc).toString();
       } else {
         return ""
@@ -56,17 +55,17 @@ const yarnmode = (() => {
 }());
 
 // Save current config as a new Profile
-function saveCurrentConfig(profileName){
+function saveCurrentConfig(profileName) {
   const npmrcFile = fs.readFileSync(npmrc).toString();
-  const yarnrcFile = (()=> {
-    if(yarnmode){
+  const yarnrcFile = (() => {
+    if (yarnmode) {
       return fs.readFileSync(yarnrc).toString();
     } else {
       return ""
     }
   })()
   let store = JSON.parse(fs.readFileSync(profile_store).toString())
-  if(!store.profiles.map(x => x.name).includes(profileName)){
+  if (!store.profiles.map(x => x.name).includes(profileName)) {
     store.last_modify = Date.now();
     store.profiles.push({
       name: profileName,
@@ -81,23 +80,23 @@ function saveCurrentConfig(profileName){
 }
 
 // Load Config by Profilename
-function loadConfigByName(profileName){
+function loadConfigByName(profileName) {
   const selectedProfile = JSON.parse(fs.readFileSync(profile_store).toString()).profiles.find(x => x.name === profileName);
-  if(selectedProfile){
+  if (selectedProfile) {
     fs.writeFileSync(npmrc, selectedProfile.npmrc, fserror)
-    if(yarnmode){
+    if (yarnmode) {
       fs.writeFileSync(yarnrc, selectedProfile.yarnrc)
     }
   } else {
-    console.error("No Profile with the Name "+profileName+" does not exist.", fserror);
+    console.error("No Profile with the Name " + profileName + " does not exist.", fserror);
     process.exit(1)
   }
 }
 
 //Delete Profile from Store
-function deleteProfileByName(profileName){
+function deleteProfileByName(profileName) {
   let store = JSON.parse(fs.readFileSync(profile_store).toString())
-  if(store.profiles.map(x => x.name).includes(profileName)){
+  if (store.profiles.map(x => x.name).includes(profileName)) {
     store.last_modify = Date.now();
     store.profiles = store.profiles.filter(prop => prop.name !== profileName)
     fs.writeFileSync(profile_store, JSON.stringify(store, null, 2), fserror)
@@ -108,21 +107,49 @@ function deleteProfileByName(profileName){
 }
 
 //List Profiles in Store
-function listProfiles(){
+function listProfiles() {
   console.log("Available Profiles:")
-  JSON.parse(fs.readFileSync(profile_store).toString()).profiles.map(function(profile) {console.log("  " + profile.name)});
+  JSON.parse(fs.readFileSync(profile_store).toString()).profiles.map(function (profile) { console.log("  " + profile.name) });
 }
 
 //Show current active Profile
-function showActive(){
-  console.log("TODO Implement")
+function showActive() {
+  const npmrcFile = fs.readFileSync(npmrc).toString();
+  const yarnrcFile = (() => {
+    if (yarnmode) {
+      return fs.readFileSync(yarnrc).toString();
+    } else {
+      return ""
+    }
+  })()
+  JSON.parse(fs.readFileSync(profile_store).toString()).profiles.map(function (profile) {
+    if (profile.npmrc == npmrcFile && compareYarnFiles(profile.yarnrc, yarnrcFile)) {
+      console.log("Active Profile: " + profile.name)
+    }
+  })
+}
+
+//Comparing Yarnfiles with out the "lastUpdateCheck" line if yarnmode return true
+function compareYarnFiles(yarnrcoriginal, yarnrcFile) {
+  if (yarnmode) {
+    let splityarnprofile = yarnrcoriginal.split("\n");
+    let splityarnfile = yarnrcFile.split("\n");
+    for (i = 0; i < splityarnprofile.length; i++) {
+      if (!splityarnprofile[i].startsWith("lastUpdateCheck")) {
+        if (splityarnprofile[i] !== splityarnfile[i]) {
+          return false;
+        }
+      }
+    }
+  }
+  return true;
 }
 
 const processArgs = process.argv.slice(2)
 
-switch(processArgs[0]) {
+switch (processArgs[0]) {
   case "save":
-    if(processArgs[1]!==undefined){
+    if (processArgs[1] !== undefined) {
       saveCurrentConfig(processArgs[1])
     } else {
       process.stdout.write(
@@ -134,7 +161,7 @@ switch(processArgs[0]) {
     }
     break;
   case "load":
-    if(processArgs[1]!==undefined){
+    if (processArgs[1] !== undefined) {
       loadConfigByName(processArgs[1])
     } else {
       process.stdout.write(
@@ -146,7 +173,7 @@ switch(processArgs[0]) {
     }
     break;
   case "delete":
-    if(processArgs[1]!==undefined){
+    if (processArgs[1] !== undefined) {
       deleteProfileByName(processArgs[1])
     } else {
       process.stdout.write(
@@ -161,7 +188,7 @@ switch(processArgs[0]) {
     listProfiles()
     break;
   case "current":
-    showAction()
+    showActive()
     break;
   case "--help":
     process.stdout.write(
